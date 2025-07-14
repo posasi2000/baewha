@@ -5,15 +5,15 @@
 진행강사: 김영임
 
 https://github.com/posasi2000/baewha.git
-
 https://www.dataq.or.kr
 
 
 https://www.oracle.com/
-//오라클사이트 회원 가입 추천 
+//오라클사이트 접속
 쿠키모두승인-> 회원가입View Accounts-> Oracle Account-> (JDK자바설치추천, OracleXE 11g필수설치)->
 setup.exe선택실행-> 비밀번호는 1234-> C드라이브 C:\oraclexe폴더에 자동설치 ->
-오라클데이터베이스 접근 명령어 진입 C:\Users\여러분컴퓨터이름>  sqlplus  system/1234
+오라클데이터베이스 접근 
+ㄴ C:\Users\여러분컴퓨터이름>  sqlplus  system/1234
 
 
 //추천 oracle데이터베이스 다운로드  11g~12c버젼 용량이 적고 가벼움
@@ -34,7 +34,7 @@ http://www.oracle.com
     : create, alter, drop, rename, truncate 
 2. 데이타 조작어(DML : Data Manipulation Language)
     : insert, update, delete, select   
-3. 트랜잭션제어 TCL
+3. 트랜잭션제어 (TCL : Transaction Control Language)
     : commit, rollback, savepoint
 4. 데이타 제어어(DCL : Data Control Language)
     : grant, revoke
@@ -42,7 +42,7 @@ http://www.oracle.com
 
 
 ★ 설명및 주석은 편의상 슬래시2개 표시 
-★ 실습순서 윈도우시작 cmd입력
+★ 실습순서 윈도우시작클릭 cmd입력
 C:\Users\여러분컴퓨터이름>  path
 C:\Users\여러분컴퓨터이름>  dir
 C:\Users\여러분컴퓨터이름>  cls
@@ -80,7 +80,7 @@ SQL>
   SQL> select concat('green', 'color') as "출력"  from dual;
 
 
-- 한글문자열 길이
+- 한글문자열 측량수치 length(), lengthb()
 length() 1byte반환, lengthb() 3byte반환
 SQL> select length('우리나라') as "출력1" , lengthb('우리나라')  as "출력2"  from dual;
      출력1      출력2
@@ -180,7 +180,7 @@ ORA-00911: invalid character
 
 
 
-- 오라클변환함수 to_함수명()
+- 오라클변환함수 to_함수명()  to_char()/to_date()/to_number()
 SQL> select sysdate  from  dual ;
 SYSDATE
 --------
@@ -237,10 +237,10 @@ SQL> select  to_char( 78049123 , 'L99,999,999.99') "결과"  from dual ;
 
 
 
-★ 참고 Domain확인
- number : 숫자형
- int    : 정수형
- char   : 문자형(고정형)
+★ 참고 domain확인=타입
+ number : 숫자형 실수형 pay  number(9,2)
+ int    : 정수형           pay  int 
+ char   : 문자형(고정형)  title char(70) 70바이트확보,  juso varchar2(70)실제 주소데이터 46정도 
  varchar/varchar2 : 문자형(가변형) - 4000byte까지
  clob : 문자형(4000byte이상일때)    - 최대 4GB character Large Object
  blob : binary로저장(그림, 음악등)  - 최대 4GB  binary  Large Object
@@ -250,27 +250,40 @@ SQL> select  to_char( 78049123 , 'L99,999,999.99') "결과"  from dual ;
  pk = 유일키값 우리나라 주민번호, 스마트폰번호, 은행계좌번호, 여러분들 학번
  not null 꼭 데이터가 있어야 합니다 (은행거래시 거래은행및 계좌번호 꼭 필요)
 
+
+★ SQL(Structured Query Language)
+★ --------------------------------------------------------------------------------------
+1. 데이타 정의어(DDL : Data Definition Language)
+    : create, alter변경, drop제거, rename이름변경, truncate삭제 
+2. 데이타 조작어(DML : Data Manipulation Language)
+    : insert신규등록, update변경수정, delete삭제, select추출뽑아오는것   
+3. 트랜잭션제어 (TCL : Transaction Control Language)
+    : commit, rollback, savepoint
+4. 데이타 제어어(DCL : Data Control Language)
+    : grant, revoke
+
+
+
 ★ 3교시
 ★ --------------------------------------------------------------------------------------
    clear screen  ;
    drop table sosi  ;  
    create table sosi (
-      code   number(4)  primary key  ,  
-      title  varchar2(16)  not null ,
-      salary number(3)   ,  
-      birth  date  
+      code열컬럼   number(4)  primary key  ,  
+      title열컬럼  varchar2(16)  not null ,
+      salary열컬럼 number(3)  ,  
+      birth열컬럼  date  
    );
 
    desc sosi ;
    commit ;
 
 
-
-insert into sosi values(2200, 'blue',  78,  sysdate);
+insert into sosi(code,title,salary,birth) values(2200, 'blue',  78,  sysdate);
 insert into sosi values(9900, 'kakao', 34, sysdate);
 insert into sosi values(8800, 'snow',  29, sysdate);
-insert into sosi values(7700, 'rain',  90, sysdate);
-insert into sosi values(5500, 'cake',  45, sysdate);
+insert into sosi values(7700, 'cake', 45,  sysdate ) ;
+insert into sosi values(5500, 'rain', 90,  sysdate ) ;
 select * from sosi ;
 commit ;
 
@@ -281,31 +294,84 @@ SQL> select rownum, code, title  from sosi ;
 SQL>  select  rownum, my.*  from sosi  my ;
 
 
+주의사항]
+select  *  from sosi ;
+insert into sosi values(3345, note, 31 ,  sysdate ) ;
+insert into sosi values(3378, 'book', 31 ,  sysdate() ) ;
+insert into sosi values(4432, 'bbs',   sysdate,  45 ) ;
+
+-- 에러해결
+insert into sosi values(3345, 'note' , 31 ,  sysdate ) ;
+insert into sosi values(3378, 'book', 31 ,  sysdate ) ;
+insert into sosi(code, title, birth, salary) values(4432, 'bbs',   sysdate,  45 ) ;
+select  *  from sosi ;
+commit ;
+
+SQL> select  *  from sosi ;
+      CODE TITLE                                SALARY BIRTH
+---------- -------------------------------- ---------- --------
+      2200 blue                                     78 25/07/14
+      9900 kakao                                    34 25/07/14
+      8800 snow                                     29 25/07/14
+      7700 cake                                     45 25/07/14
+      5500 rain                                     90 25/07/14
+      3345 note                                     31 25/07/14
+      3378 book                                     31 25/07/14
+      4432 bbs                                      45 25/07/14
+
+해결1] 행번호  select rownum, code, title, salary, birth from  sosi  ;
+해결2] code열컬럼 순서대로 출력  select * from  sosi   order by code asc ;
+        select * from  sosi   order by code asc ;
+        select * from  sosi   order by code desc ;
+        select * from  sosi   order by code ; -- order by 컬럼 
+        select * from  sosi   order by salary desc ;
+해결3] title열컬럼에서  rain데이터추출   SQL문에서 조건절은 where 컬럼  연산  값  
+	select * from  sosi  where  title  = rain ;  -- 에러 
+	select * from  sosi  where  title  = 'rain' ;
+	select * from  sosi  where  title  = 'RAIN' ;
+
+	select  *  from sosi ;
+	commit ;
+
+해결4] title열컬럼에서  o글자포함  like  '%o%' 
+	select * from  sosi  where  title  = '%o%' ;
+   	select * from  sosi  where  title  = like '%o%' ;
+   	select * from  sosi  where  title  like '%o%' ;
+
+ -- table확인
+SQL> select  tname from  tab ;
+
 ★ 4교시
 ★ --------------------------------------------------------------------------------------
 //user확인하는 명령어
+SQL> show user ;
 SQL> select  username from  dba_users ;
 SQL> select  username from  all_users ;
 
 
-//summer유저생성(나중에 개인적으로 실습가능) 
+//summer유저생성
 SQL> create user summer
      identified by 1234
      default tablespace users
      temporary tablespace temp ;
+
+//user유저확인 명령어
+SQL> select  username from  dba_users ;
+SQL> select  username from  all_users ;
 
 //summer유저 접속및 자원 권한부여
 SQL> grant  connect  to summer ;
 SQL> grant  resource to  summer ;
 SQL> grant  dba  to  summer ;
 
-//user유저확인 명령어
-SQL> select  username from  dba_users ;
-SQL> select  username from  all_users ;
 
 SQL> connect  summer/1234 ;
 SQL> show user;
       USER is "summer"  메세지자동출력됨
+
+ -- table확인 유저가 서머summer일때  생성된테이블이 없어서 안보임
+SQL> select  tname from  tab ;
+SQL> select *  from sosi ; -- sosi테이블소유자는 system라서 안보임
 
 
 //summer유저에서 시스템유저로 접속 
@@ -313,6 +379,10 @@ SQL> connect  system/1234 ;
 SQL> show user;
      USER is "SYSTEM"
  
+ -- table확인
+SQL> select  tname from  tab ;
+SQL> select *  from sosi ;
+
 
 ★ SQL(Structured Query Language)
 ★ --------------------------------------------------------------------------------------
