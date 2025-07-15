@@ -269,10 +269,10 @@ SQL> select  to_char( 78049123 , 'L99,999,999.99') "결과"  from dual ;
    clear screen  ;
    drop table sosi  ;  
    create table sosi (
-      code열컬럼   number(4)  primary key  ,  
-      title열컬럼  varchar2(16)  not null ,
-      salary열컬럼 number(3)  ,  
-      birth열컬럼  date  
+      code   number(4)  primary key  ,  
+      title   varchar2(16)  not null ,
+      salary  number(3)  ,  
+      birth   date  
    );
 
    desc sosi ;

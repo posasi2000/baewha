@@ -15,6 +15,8 @@ C:\devSQL 폴더생성 혹은 여러분이 좋아하는 이름의 폴더도 좋�
 
 ★ 1교시  새로운명령어 spool는 SQL문서를 기록하는 로그역할 
 ★ --------------------------------------------------------------------------------------
+윈도우시작아이콘 클릭후  cmd
+윈도우시작아이콘 + R(run) 
 C:\Users\여러분컴퓨터이름>  sqlplus system/1234
 SQL> show user ;
 SQL> select sysdate from dual ;
@@ -52,18 +54,41 @@ SQL> show user;
 SQL> select  tname from  tab ;
 SQL> select *  from sosi ; 
 
-
-//summer유저에서 시스템유저로 접속 
-SQL> connect  system/1234 ;
+SQL> connect  system/1234 ; --다시 재접속하시면 됩니다 
 SQL> show user;
      USER is "SYSTEM"
- 
+
+//잠시만 다시 복붙 start 
+   clear screen  ;
+   drop table sosi  ;  
+   create table sosi (
+      code    number(4)     primary key ,  
+      title   varchar2(16)  not null ,
+      salary  number(3)  ,  
+      birth   date  
+   );
+
+   desc sosi ;
+   commit ;
+
+
+insert into sosi(code,title,salary,birth) values(2200, 'blue',  78,  sysdate);
+insert into sosi values(9900, 'kakao', 34, sysdate);
+insert into sosi values(8800, 'snow',  29, sysdate);
+insert into sosi values(7700, 'cake', 45,  sysdate ) ;
+insert into sosi values(5500, 'rain', 90,  sysdate ) ;
+select * from sosi ;
+commit ;
+
+//잠시만 다시 복붙 END
+
+
  -- table확인
 SQL> select  tname from  tab ;
 SQL> select *  from sosi ; 
 
 
-//다시 초간단 연산처리및 안내문출력  안내문은 반드시 "안내"
+//다시 초간단 연산처리및 안내문출력  안내문은 반드시 "안내"  as키워드 생략가능
 SQL> select 2+5*7-2  from  dual ;
 SQL> select 2+5*7-2    "결과"  from  dual ;
 SQL> select 2+5*7-2  as "결과"  from  dual ;
@@ -73,8 +98,7 @@ SQL> select 2+5*7-2  as  '결과'  from  dual ;
    ORA-00923: FROM keyword not found where expected
 
 
-
-- 수학함수에서 반올림처리안하고 무조건 자르기
+- 수학함수에서 반올림처리안하고 무조건 자르기  floor(), trunc() 
 SQL> select  floor(12.3456)  as "결과"  from dual ;   -- 결과 12출력
 SQL> select  floor(12.9876)  as "결과"  from dual ;   -- 결과 12출력
 SQL> select  trunc(67.1234)  as "결과"  from dual ;   -- 결과 67출력
@@ -85,6 +109,7 @@ SQL> select  trunc(67.1276, 3)  as "결과"  from dual ;   -- 결과 67.127출�
 SQL> select  trunc(67.9872, 3)  as "결과"  from dual ;   -- 결과 67.987출력
 
 - 반올림 적용하는 수학함수는 round(숫자, 자릿수)
+SQL> clear screen ;
 SQL> select  round(67.1276, 3)  as "결과"  from dual ;   -- 결과 67.128출력
 SQL> select  round(67.9872, 3)  as "결과"  from dual ;   -- 결과 67.987출력
 
@@ -102,10 +127,13 @@ SQL> select  to_char(sysdate, 'yyyy-mm-dd HH:MM:SS') "날짜"  from dual ;
 
 SQL> select  to_date( '2025-06-14', 'yyyy-mm-dd' ) "날짜"   from dual ; -- 날짜 25/06/14
 SQL> select  to_number('12000') + to_number('987')  "결과"  from  dual ;  -- 결과 12987
+      오라클변환함수 to_함수명()  to_char()/to_date()/to_number() 확인
+
 SQL> select  to_char( 789123 , '$99,999,999.99') "결과"  from dual ;  -- 결과 $789,123.00
 SQL> select  to_char( 789123 , 'L99,999,999.99') "결과"  from dual ;  -- 결과 ￦789,123.00
 
-SQL> spool off ; 
+ -- 생략
+끝날때 4교시 전에 실습 SQL> spool off ; 
 참고 SQL>  @ C:\devSQL\sositest.sql
 참고 SQL>  start C:\devSQL\sositest.sql
 
@@ -116,7 +144,7 @@ SQL> spool off ;
 1. 데이타 정의어(DDL : Data Definition Language)
     : create, alter변경, drop제거, rename이름변경, truncate삭제 
 2. 데이타 조작어(DML : Data Manipulation Language)
-    : insert신규등록, update변경수정, delete삭제, select추출뽑아오는것   
+    : insert신규등록, update변경수정 ~ 조건where, delete삭제 ~ 조건where, select추출뽑아오는것  조건where 
 3. 트랜잭션제어 (TCL : Transaction Control Language)
     : commit, rollback, savepoint
 4. 데이타 제어(DCL : Data Control Language)
@@ -125,16 +153,16 @@ SQL> spool off ;
 
 ★ 참고 domain확인=타입
 ★ --------------------------------------------------------------------------------------
- number : 숫자형 실수형 pay  number(9,2)
- int    : 정수형           pay  int 
- char   : 문자형(고정형)  title char(70) 70바이트확보,  juso varchar2(70)실제 주소데이터 46정도 
+ number : 숫자형 실수형     eye시력측정  number(7,2)
+ int    : 정수형            hit조회수  int 
+ char   : 문자형(고정형)    company회사명 char(70) 70바이트확보,  juso varchar2(250) 주소 60바이트
  varchar/varchar2 : 문자형(가변형) - 4000byte까지
  clob : 문자형(4000byte이상일때)    - 최대 4GB character Large Object
  blob : binary로저장(그림, 음악등)  - 최대 4GB  binary  Large Object
  date : 날짜형
  timestamp : date형의 확장
 
- pk = 유일키값 우리나라 주민번호, 스마트폰번호, 은행계좌번호, 여러분들 학번
+ primary key = 유일키값 우리나라 주민번호, 스마트폰번호, 은행계좌번호, 여러분들 학번
  not null 꼭 데이터가 있어야 합니다 (은행거래시 거래은행및 계좌번호 꼭 필요)
 
 
@@ -150,7 +178,7 @@ SQL> desc tab ;
 SQL> select  tname from  tab ;
 
 SQL> desc user_tables ;
-SQL> select  table_name  from user_tables ;
+SQL> select  table_name  from user_tables ; --너무 많이 나옵니다 
 
 ★ 2교시
 ★ --------------------------------------------------------------------------------------
@@ -184,30 +212,21 @@ SQL>  select  rownum, my.*  from sosi  my ;
 
 주의사항]
 select  *  from sosi ;
-insert into sosi values(3345, note, 31 ,  sysdate ) ;
-insert into sosi values(3378, 'book', 31 ,  sysdate() ) ;
-insert into sosi values(4432, 'bbs',   sysdate,  45 ) ;
+insert into sosi values(3345, note, 31 ,  sysdate ) ;  에러발생 문자데이터는 반드시  ''
+insert into sosi values(3378, 'book', 45 ,  sysdate() ) ;  에러발생
+insert into sosi values(4432, 'bbs',   sysdate,  78 ) ;    에러발생 
+insert into sosi value(7799, 'kim', 56 ,  sysdate ) ;   에러발생 
 
 -- 에러해결
 insert into sosi values(3345, 'note' , 31 ,  sysdate ) ;
-insert into sosi values(3378, 'book', 31 ,  sysdate ) ;
-insert into sosi(code, title, birth, salary) values(4432, 'bbs',   sysdate,  45 ) ;
+insert into sosi values(3378, 'book', 45 ,  sysdate ) ;
+insert into sosi(code, title, birth, salary) values(4432, 'bbs',   sysdate,  78 ) ;
+insert into sosi values(7799, 'kim', 56 ,  sysdate ) ; 
 select  *  from sosi ;
 commit ;
 
-SQL> select  *  from sosi ;
-      CODE TITLE                                SALARY BIRTH
----------- -------------------------------- ---------- --------
-      2200 blue                                     78 25/07/14
-      9900 kakao                                    34 25/07/14
-      8800 snow                                     29 25/07/14
-      7700 cake                                     45 25/07/14
-      5500 rain                                     90 25/07/14
-      3345 note                                     31 25/07/14
-      3378 book                                     31 25/07/14
-      4432 bbs                                      45 25/07/14
 
-해결1] 행번호  select rownum, code, title, salary, birth from  sosi  ;
+해결1]  select rownum, code, title, salary, birth from  sosi  ;
 해결2] code열컬럼 순서대로 출력  select * from  sosi   order by code asc ;
         select * from  sosi   order by code asc ;
         select * from  sosi   order by code desc ;
@@ -231,12 +250,14 @@ SQL> select  *  from sosi ;
 실습 where]
 select * from sosi order by code ;
 select * from sosi  where code = 5500  order by code;
+select * from sosi  where  order by code  code = 5500 ; -- 문법에러 
 select * from sosi  where code != 5500 order by code;
 select * from sosi  where code ^= 5500 order by code;
 select * from sosi  where code <> 5500 order by code;
 
 문제] 제목중에서 e포함    코드 7700  논리조건 or
-SQL> select * from sosi where title like '%e%' or code=7700 ;
+SQL> select * from sosi where title like '%e%' or  code=7700 ;
+SQL> select * from sosi where title like '%d%' and  code=7700 ;
 SQL> select * from sosi where title like '%e%' and code=7700 ;
 
 
@@ -244,7 +265,7 @@ SQL> select * from sosi where title like '%e%' and code=7700 ;
 SQL> select * from sosi where code in ( 2200, 7700 ) ;  -- code=2200 or code=7700
 SQL> select * from sosi where code = 2200 and  code=7700 ;
 SQL> select * from sosi where code = 2200 or  code=7700 ;
-SQL> select * from sosi where code >= 2200 and  code <= 7700 ;
+SQL> select * from sosi where code >= 2200  and  code <= 7700 ;
 SQL> select * from sosi where code between  2200  and  7700 ;
 SQL> select * from sosi where code between  7700  and  2200 ;  -- 출력결과 no rows selected
 
@@ -256,26 +277,40 @@ SQL> select * from sosi where code between  7700  and  2200 ;  -- 출력결과 n
  ㄴ insert, update, delete, select   
 
 
-문제1] 데이터 3건 더 추가 insert 
+문제1] 데이터 3건 더 추가 insert
+SQL> select * from  sosi ;
+ 
 code 3300,  title  'daum'    salary 16  birth sysdate
-code 5500,  title  'java'    salary 95  birth sysdate
+code 1100,  title  'hong'    salary 95  birth sysdate
 code 6600,  title  'gram'    salary 87  birth sysdate
+
+ insert into sosi values( 3300, 'daum', 16 , sysdate ) ;
+ insert into sosi values( 1100, 'hong', 95 , sysdate ) ;
+ insert into sosi values( 6600, 'gram', 87 , sysdate ) ;
 select * from  sosi  ;
 commit ;
 
 
 
-문제2] update갱신 데이터 변경
-  update sosi set salary=970  where code = 2200 ;
-  update sosi set salary=56   where code = 8800 ;
-  update sosi set salary=17   where code = 5500 ; 
- select * from  sosi  ;
- commit ;
+문제2] update갱신 데이터 변경 update  테이블대상  set  필드  where 필드  = 데이터값 ;
+  update sosi set salary=970   where code = 2200 ;
+   select * from  sosi  ;
+  update sosi set salary=560   where code = 8800 ;
+   select * from  sosi  ;
+  update sosi set salary=170   where code = 5500 ; 
+   select * from  sosi  ;
+   commit ;
 
-
+DML언어(insert,select,update~where,delete~where)
 문제3] code 3345, code 4432 데이터 삭제, 삭제처리는 위험
-
-
+ delete from sosi where code = 3345 ;
+ delete from sosi where code = 4432 ;
+ select * from  sosi  ;
+   commit ;
+ 
+ SQL> spool off  ;
+현재날짜및 시간 7-15-화요일 12시 35분 실습확인
+SQL> spool C:\devSQL\sosi0715.sql ;
 
 
 ★ 4교시 DDL실습
@@ -284,7 +319,7 @@ commit ;
 ★ --------------------------------------------------------------------------------------
 SQL> desc sosi  ;
 문제1]  hit숫자컬럼 추가 기본값은 0
-  alter table sosi add( hit  int default 0 ) ;
+  alter table sosi add(hit  int default 0) ;
   desc sosi ;
   select * from  sosi  ;
 
@@ -294,15 +329,19 @@ SQL> desc sosi  ;
     desc sosi ;
     select * from  sosi  ;
 
+set linesize 2000 ;
+set pagesize 2000 ;
+select * from sosi ;
+desc sosi ;
 
-실습3] title컬럼 varchar2(10) 축소 
+
+실습3] title컬럼 varchar2(10) 크기변경 modify
   alter table sosi modify( title varchar2(10)) ;
   desc sosi ;
   select * from  sosi  ;
 
-
 실습4] salary컬럼  pay필드변경
-  alter table sosi rename column salary to   pay ;
+  alter table sosi rename column salary  to   pay ;
   desc sosi ;
   select * from  sosi  ;
 
@@ -318,14 +357,20 @@ SQL> desc sosi  ;
   select * from  sosi  ;
   commit ;
 
+set linesize 2500 ;
+set pagesize 2500 ;
+col  title for a10 ;
+col  code  for 9999 ;
+select * from sosi ;
+
 실습7] 조건처리 
-   update sosi  set grade='A' where pay > 90 ;
-  update sosi  set grade='B' where pay > 70 ;
-  update sosi  set grade='C' where pay > 60 ;
-  update sosi  set grade='D' where pay > 50 ;
+  update sosi  set grade='D' where pay >= 50 ;
+  update sosi  set grade='C' where pay >= 60 ;
+  update sosi  set grade='B' where pay >= 70 ;
+  update sosi  set grade='A' where pay >= 90 ;
+  
   select * from  sosi  ;
   commit ;
-
 
 
 실습8] 조건처리 
@@ -336,12 +381,14 @@ SQL> desc sosi  ;
         when grade = 'C'  then  '보통수준'
         when grade = 'D'  then  '좀노력'
         when grade = 'F'  then  '재수강'
-      end   
+      end   "결과"
    from sosi;
 
+   select * from  sosi  ;
+   commit ;
 
 
-
+DDL, DML, DCL 
 ★ user확인하는 명령어
 SQL> select  username from  dba_users ;
 SQL> select  username from  all_users ;
