@@ -412,6 +412,17 @@ SQL> select  rank()  over(order by (kor+eng+mat) desc )  "순위" ,
 
 ★ 4교시 emp테이블및 데이터모델링
 ★ --------------------------------------------------------------------------------------
+
+  C:\oraclexe\app\oracle\product\11.2.0\server\rdbms\admin\scott.sql
+참고만SQL> @ C:\oraclexe\app\oracle\product\11.2.0\server\rdbms\admin\scott.sql
+참고만SQL> commit ;
+참고만SQL> show user;
+참고만SQL> alter user scott identified by tiger ;
+참고만SQL> conn scott/tiger
+참고만 SQL> show user;
+
+
+
 drop table emp ;
 drop table dept ;
 drop table salgrade ;

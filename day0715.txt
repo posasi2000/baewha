@@ -45,6 +45,9 @@ SQL> grant  connect  to baewha ;
 SQL> grant  resource to  baewha ;
 SQL> grant  dba  to  baewha ;
 
+SQL> grant  resource, connect  to   baewha ;   -- 권한 부여
+SQL> revoke resource, connect  from baewha ;   -- 권한 회수
+
 
 SQL> connect  baewha/1234 ;
 SQL> show user;
@@ -53,6 +56,8 @@ SQL> show user;
  -- baewha유저는  sosi테이블 안보임
 SQL> select  tname from  tab ;
 SQL> select *  from sosi ; 
+
+
 
 SQL> connect  system/1234 ; --다시 재접속하시면 됩니다 
 SQL> show user;
