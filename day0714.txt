@@ -48,6 +48,13 @@ C:\Users\여러분컴퓨터이름>  dir
 C:\Users\여러분컴퓨터이름>  cls
 
 
+7월14일 월요일 수업내용
+ ㄴ1교시 데이터베이스설치
+ ㄴ2교시 출력, 연산, 내장함수(수학,문자,날짜,변환)
+ ㄴ3교시 테이블작성, 간단한 데이터 입력 
+ ㄴ4교시  summer유저생성 
+
+
 
 ★ 1교시
 ★ --------------------------------------------------------------------------------------
@@ -108,7 +115,7 @@ SQL> select instr('skyblue', 'sky' ) as "결과"   from dual ;
       결과
 ----------
          1
-SQL> select concat('sky', 'blue')   as "결과"    from dual ;
+SQL> select concat('sky', 'blue')   as "결과"    from dual ;  -- concatenate연결약어 
 결과
 --------------
 skyblue

@@ -14,7 +14,7 @@ https://www.oracle.com/database/technologies/xe-prior-release-downloads.html   /
 7월16일 수요일 수업내용
  ㄴ1교시 select조건 복습 , group by
  ㄴ2교시 집합함수 sum(), avg(), count(), 문자함수응용
- ㄴ3교시 시퀀스sequence, sum(), rank() 함수응용 
+ ㄴ3교시 시퀀스sequence, rank() 함수응용 
  ㄴ4교시 emp테이블및 모델링이론 
 
 ★ 1교시 
@@ -42,6 +42,7 @@ SQL> grant  connect  to baewha ;
 SQL> grant  resource to  baewha ;
 SQL> grant  dba  to  baewha ;
 
+
 SQL> grant  resource, connect  to   baewha ;   -- 권한 부여 이렇게 기술가능
 SQL> revoke resource, connect  from baewha ;   -- 권한 회수 이렇게 기술가능
 
@@ -54,7 +55,8 @@ SQL> connect  system/1234 ;
 SQL> show user;
      user is "system" 
 
-SQL> drop user  baewha cascade; -- 삭제는 하지 마세요. 생성된자원이나 객체데이터가 있을때는 cascade옵션을 주면 삭제 
+DDL-create,alter,drop명령어확인
+SQL> drop user  baewha  cascade; -- 삭제는 하지 마세요. 생성된자원이나 객체데이터가 있을때는 cascade옵션을 주면 삭제 
 ★ --------------------------------------------------------------------------------------
 ★ 월요일, 화요일 수업 미참여 하신분들은 아래 sosi 테이블s내용 복사 붙여넣기 하세요.
  clear screen  ;  
@@ -97,7 +99,7 @@ select * from sosi  where code != 5500 order by code;
 select * from sosi  where code ^= 5500 order by code;
 select * from sosi  where code <> 5500 order by code;
 
-
+select ~~~ where  title  like  '%검색키워드%' 
 [김밥, 꼬마김밥, 김치라면, 양반김, 김치, 김치찌개, 총각김치, 파김치, 파래김, 나박김치 ]
 ▶ 김% : 김밥, 김치, 김치찌개, 김치라면
 ▶ %김 : 양반김,파래김
@@ -108,7 +110,7 @@ select * from  sosi  where  title  like '%e%' ;
 select * from sosi where title like '%e%' or  code=7700 ;
 select * from sosi where title like '%e%' and code=7700 ;
 
-select * from sosi where code >= 2200  and  code <= 7700 ;
+select * from sosi where code >= 2200  and  code <= 7700 ;  -- 날짜조회 
 select * from sosi where code between  2200  and  7700 ;
 
 
@@ -166,6 +168,7 @@ col  grade for a10 ;  -- char(1)라서 열제목공간을 늘려줌
   commit ;
 
 
+col  grade for a10 ;  -- char(1)라서 열제목공간을 늘려줌
 실습8] 조건처리 case ~ end 성적처리 축합격및 재시험을 아래 student에서 응용
  select code, grade ,
      case 
@@ -173,13 +176,13 @@ col  grade for a10 ;  -- char(1)라서 열제목공간을 늘려줌
         when grade = 'B'   then  '합격'
         when grade = 'C'   then  '보통'
         when grade = 'D'   then  '노력'
-       else   '재수강'
+        else   '재수강'
       end   "결과"
    from sosi;
 
 
 
-실습9] 조건처리 decode ()
+실습9] 조건처리 decode () 
    select code, grade,
    decode( grade , 'A', '10', 'B', '10', 'C', '5', 'D', '3', '1') as "결과" 
    from sosi ;
@@ -207,7 +210,26 @@ SQL>  clear screen ;
 
 
 
+문제1]  pay급여가  90보다 크거나 같은 데이터 추출 select where
+SQL>  select * from sosi where  code >= 90 ;
+
+문제2]  title제목컬럼  데이터에서 o단어포함된 사람 추출
+SQL>select * from sosi where title like '%o%' ;
+
+문제3]  code컬럼을 역순으로 소트
+SQL> select * from sosi order by code desc;
+
+문제4] pay총합계 sum() , 총레코드갯수
+SQL> select sum(pay) "합계"  from sosi ;
+SQL> select count(*) "갯수"  from sosi ;
+
+에러 SQL> select code, sum(pay) "합계"  from sosi ;
+에러 SQL> select name, count(*) "갯수"  from sosi ;
+에러해결을 group그룹화 
+
+
 col  grade for a10 ;  -- char(1)라서 열제목공간을 늘려줌
+집계함수 count(),sum()  결과값이 한건으로 출력 
 ★ 2교시 수학내장함수, select쿼리 group by ~ 조건절 having
 ★ --------------------------------------------------------------------------------------
 SQL> select * from sosi ;
@@ -225,7 +247,8 @@ SQL> select grade, sum(pay)  "합계"  from sosi ;
      ORA-00937: not a single-group group function
      ERROR이유를 생각해봅시다 왜? 에러인지? 
 
-SQL> select grade, sum(pay)  "합계"  from sosi  group by grade ;
+SQL> select grade, sum(pay)  "합계"  from sosi  
+     group by grade ;
 GRADE            합계
 ---------- ----------
 D                  45
@@ -233,11 +256,17 @@ A                1795
 B                  87
 F                  95
 
+데이터를 관리하는 테이블생성 create,구조변경alter,drop 
+데이터를 조작하는 dml(insert,select,update ~ where, delete~where)
+select구문순서 필드명1,필드명2  from table이름  
+ where 컬럼 조건절  group by grade 그룹조건having절 order by 컬럼
 
 SQL> select grade, sum(pay)  "합계"  from sosi  group by grade order by grade ;
-SQL> select grade, sum(pay)  "합계"  from sosi  group by grade  having sum(pay) > 90  order by grade ;
+SQL> select grade, sum(pay)  "합계"  from sosi  
+     group by grade  having sum(pay) > 90  order by grade ;
 SQL> select grade , to_char(sum(pay), 'L99,999')  "합계"  from sosi group by grade
       having sum(pay)> 90 order by grade ;
+
 
 
 
@@ -250,7 +279,7 @@ SQL> select grade , to_char(sum(pay), 'L99,999')  "합계"  from sosi group by g
  select grade, to_char(round(avg(pay),2) , '99,999.99')  "평균" from sosi group by grade order by grade;
 
  select grade, to_char(round(avg(pay),2) , '99,999.99')  "평균" from sosi
-  group by grade having avg(pay) < 50  order by grade ;
+  group by grade having avg(pay) < 80  order by grade ;
 
 
 
@@ -262,19 +291,36 @@ SQL> select  "1200" + "78"  as "출력"  from dual;   -- 에러
 
 SQL> select  to_number('1200') + to_number('87')  "출력"  from  dual ;  -- 1287출력
 SQL> select  '120000' + '789'  as "출력"  from dual;      -- 120789출력
+
+
 SQL> select concat(title, pay) as "출력"  from sosi;       -- 성공
+SQL> select concat('주제목', title, pay) as "출력"  from sosi;       --  실패에러
 SQL> select concat( '주제목', concat( title, pay))  as "출력"  from sosi;       -- 성공 중첩기술해야함
 
 SQL> select  '주제목는' || title ||  ' 급여는 ' || pay  "출력"  from sosi ;
 SQL> select  '주제목는' || title ||  ' 등급은 '  || grade  || ' 입니다'  "출력"   from sosi ;
 
 
+DDL언어 create
+ㄴcreate user baewha ~~
+ㄴcreate table sosi ~~
+ㄴcreate sequence ~~ 번호를 순차적으로 생성 
+ㄴcreate view ~~ 
+ㄴcreate index ~~
+
+★  객체대상 확인하는 쿼리문장 비고
+SQL> select  username from  dba_users ;
+SQL> select  username from  all_users ;
+SQL> select  tname from  tab ;
+
+SQL> select  sequence_name  from user_sequences; 
+SQL> select  table_name     from user_tables ;
 
 ★ 3교시
 ★ --------------------------------------------------------------------------------------
--- 시퀀스 순차번호 발생
--- DDL에서 drop실습
--- 트랜잭션 
+-- 시퀀스 순차번호 = 일련번호 발생
+-- DDL에서 create,alter,drop실습
+-- 트랜잭션  TCL 
   rollback : 마지막  되돌리기
   commit : 완전히 DB에 저장하기
 
@@ -290,16 +336,16 @@ SQL> select sequence_name  from user_sequences;
 
 INCREMENT BY : 시퀀스 실행 시 증가시킬 값
 START WITH : 시퀀스의 시작값이다. (MINVALUE과 같거나 커야 한다)
-MINVALUE : 시퀀스가 시작되는 최솟값이다.
-MAXVALUE : 시퀀스가 끝나는 최댓값이다.
-NOCYCLE | CYCLE : NOCYCLE (반복안함), CYCLE(시퀀스의 최댓값에 도달 시 최소값 1부터 다시시작)
+MINVALUE : 시퀀스가 시작되는 최소값이다.
+MAXVALUE : 시퀀스가 끝나는 최대값이다. 
+NOCYCLE | CYCLE : NOCYCLE (반복안함), CYCLE(시퀀스의 최대값에 도달 시 최소값 1부터 다시시작)
 NOCACHE | CACHE : NOCACHE(사용안함), CACHE(캐시를 사용하여 미리 값을 할당해 놓아서 속도가 빠르며, 동시 사용자가 많을 경우 유리)
 NOORDER | ORDER : NOORDER(사용안함), ORDER(요청 순서로 값을 생성하여 발생 순서를 보장하지만 조금의 시스템 부하가 있음)
 
 
 
 [문제해결]
-ㄴ 시퀀스명 : stu_seq  1부터시작 1씩증가, nocycle, nocache
+ㄴ 시퀀스명 : stu_seq  1부터시작 1씩증가, nocycle, nocache, noorder
 ㄴ 테이블명 : student
 idx컬럼  number(4)숫자(4)  기본키 
 name컬럼  varchar2(10)  널허용X 
@@ -317,22 +363,28 @@ mat컬럼   number(3) default 0 지정
  희동이, 80,78,90
 
  
-
+//시퀀스생성  
 drop sequence st_seq ;
 create sequence st_seq increment by 1 start with 1 nocycle nocache;
 select sequence_name  from user_sequences; 
 
 
+//테이블생성
 drop table student ;
 create table student(
-  idx number(4) primary key,
-  name varchar2(10) not null,
-  kor number(3) default 0,
-  eng number(3) default 0,
-  mat number(3) default 0
+  idx number(4) primary key ,
+  name varchar2(10) not null ,
+  kor number(3) default 0 ,
+  eng number(3) default 0 ,
+  mat number(3) default 0 
 ); 
 
+SQL> select  sequence_name  from user_sequences; 
+SQL> select  table_name     from user_tables ;
+SQL> commit ;
 
+-- 에러이유 						       st_seq.nextval()괄호없음             
+-- 주석에러  insert into student(idx, name, kor,eng,mat) values(st_seq.nextval(), '둘리짱', 80, 80, 95);                                            
 insert into student(idx, name, kor,eng,mat) values(st_seq.nextval, '둘리짱', 80, 80, 95);
 insert into student(idx, name, kor,eng,mat) values(st_seq.nextval, '또치군', 75,90,65);
 insert into student(idx, name, kor,eng,mat) values(st_seq.nextval, '고길동', 100,95,90);
@@ -348,52 +400,69 @@ commit;
  select * from  student;
  commit ;
 
+
+
 SQL>  select idx , name , kor , eng , mat,
        (kor+eng+mat) as total, to_char( round((kor+eng+mat)/3,2), '999.99')  as avg
        from student ;
 
 SQL>  select idx , name , kor , eng , mat,
        (kor+eng+mat) as total, to_char( round((kor+eng+mat)/3,2), '999.99')  as avg
-       from student where  (kor+eng+mat) > 230 ;
+       from student where  (kor+eng+mat) >= 230 ;
 
 SQL> select * from  student; 
 
 SQL> select idx , name , kor , eng , mat,
     (kor+eng+mat) as total, to_char( round((kor+eng+mat)/3,2), '999.99')  as avg  from student ;
 
+SQL>  desc student ;
+SQL>  set linesize 2500 ;
+SQL>  set pagesize 2500 ;
+SQL> select * from  student; 
 
-SQL> select idx as "학번", name as "이름", kor as "국어", eng as "영어", mat as "수학", 
+SQL> select idx as "순서", name as "이름", kor as "국어", eng as "영어", mat as "수학", 
      to_char((kor+eng+mat),'99,999')  as "총점", to_char( round((kor+eng+mat)/3,2), '999.99')  as "평균" 
      from  student  order by 7 desc;
 
+-- 권장 
+SQL> select idx, name, kor, eng, mat , 
+     to_char((kor+eng+mat),'99,999') total  , to_char( round((kor+eng+mat)/3,2), '999.99') avg 
+     from  student  order by 7 desc;
 
+
+-- 총점순으로  순위 rank() over()
+-- 아래코드는 직접 기술
 SQL> select idx , name , kor , eng , mat,
-    (kor+eng+mat) as total,  rank()  over(order by (kor+eng+mat) desc )  "순위"  from student ;
-
+    (kor+eng+mat) as "total",  rank()  over(order by (kor+eng+mat) desc )  "순위"  from student ;
 
 
 SQL> select idx , name , kor , eng , mat,
     sum(kor+eng+mat)   over(order by (kor+eng+mat) desc )  "누적치"  from student ;
 
 
+ 
 SQL> select idx , name , kor , eng , mat ,
      (kor+eng+mat) total, floor((kor+eng+mat)/3) as avg,
        case
-           when floor((kor+eng+mat)/3) > 70 then '축합격'
+           when floor((kor+eng+mat)/3) >= 70 then '축합격'
            else  '재시험'
        end  "결과"
    from  student  order by  avg desc;
 
 
 
+SQL>  edit C:\devSQL\student.sql 
 SQL> select  rank()  over(order by (kor+eng+mat) desc )  "순위" ,
      name , kor , eng , mat ,
      (kor+eng+mat) total, floor((kor+eng+mat)/3) as avg,
        case
-            when floor((kor+eng+mat)/3) > 70 then '축합격'
+            when floor((kor+eng+mat)/3) >= 70 then '축합격'
             else  '재시험'
        end  "결과" 
    from  student  order by  avg desc;
+
+SQL>   start C:\devSQL\student.sql  -- sql쿼리문서실행
+SQL>   @  C:\devSQL\student.sql      -- sql쿼리문서실행
 
       순위 NAME         KOR ENG MAT      TOTAL        AVG 결과
 ---------- ------------ --- --- --- ---------- ---------- ------------------
@@ -404,11 +473,14 @@ SQL> select  rank()  over(order by (kor+eng+mat) desc )  "순위" ,
          4 도우넛        75  80  75        230         76 축합격
          6 마이콜        60  60  60        180         60 재시험
 
+SQL> select * from student ;
 
-
-  참고 select ename, sal, sum(sal) over(order by sal asc) "누적치"  from emp;
+  참고 select ename, sal, sum(sal) over(order by sal asc) "누적"  from emp;
   참고 select ename, sal, rank()  over(order by sal )  "순위"  from  emp ;
-
+  참고  select empno, ename, sal  from emp   ;
+  참고 select * from emp where sal between 1000  and  2500 ;
+  참고 select * from emp where ename = 'adams' ;
+  참고 select * from emp where ename = 'ADAMS' ;
 
 ★ 4교시 emp테이블및 데이터모델링
 ★ --------------------------------------------------------------------------------------
@@ -419,10 +491,10 @@ SQL> select  rank()  over(order by (kor+eng+mat) desc )  "순위" ,
 참고만SQL> show user;
 참고만SQL> alter user scott identified by tiger ;
 참고만SQL> conn scott/tiger
-참고만 SQL> show user;
+참고만SQL> show user;
 
-
-
+★ -- 7/17 목요일 제약조건 
+★ -- 여기서부터 아래문장까지 복사해서 붙여넣기
 drop table emp ;
 drop table dept ;
 drop table salgrade ;
@@ -480,7 +552,9 @@ commit ;
  INSERT INTO EMP VALUES(7934,'MILLER','CLERK',7782, to_date('1982-01-23','yyyy-MM-dd'),1300,null,10);
  select * from emp ;
  commit ;
-
+ select * from dept ;
+ commit ;
+ -- 여기까지 먼저 1차 복사붙여넣기 
 
 
 create table salgrade (
@@ -498,6 +572,7 @@ create table salgrade (
  col grade for 9999;
  select * from salgrade ;
  commit ;
+ -- 여기까지 먼저 2차 복사붙여넣기 
 
 
 create table bonus

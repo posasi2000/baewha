@@ -13,6 +13,12 @@ https://www.oracle.com/database/technologies/xe-prior-release-downloads.html   /
 임의의 작업폴더 생성
 C:\devSQL 폴더생성 혹은 여러분이 좋아하는 이름의 폴더도 좋습니다
 
+7월15일 화요일 수업내용
+ ㄴ1교시 user권한, table구조, DML데이터조작=crud=등록,select,update,delete 
+ ㄴ2교시 DML조작 select 조건where order by
+ ㄴ3교시 DDL조작 alter키워드 항목추가,컬럼명 변경, 컬럼삭제
+ ㄴ4교시 DDL + DML조작 
+
 ★ 1교시  새로운명령어 spool는 SQL문서를 기록하는 로그역할 
 ★ --------------------------------------------------------------------------------------
 윈도우시작아이콘 클릭후  cmd
